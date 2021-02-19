@@ -3,7 +3,7 @@ pandas
 numpy
 seaborn
 matplotlib
-feature-engine
+feature-engine==0.6.0
 scikit-learn
 Flask
 IPython
