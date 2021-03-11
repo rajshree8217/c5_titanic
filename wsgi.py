@@ -12,10 +12,6 @@ import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
 
-# Add in Week 9
-# for graphical output to df.head and df.describe from within a function, use display NOT print
-from IPython.display import display  
-
 # Train test split
 from sklearn.model_selection import train_test_split
 
@@ -45,7 +41,7 @@ np.set_printoptions(precision=4, suppress=True, floatmode='fixed')
 pd.options.display.max_columns = None
 pd.options.display.max_rows = None
 
-# global variables available to all functionprintTos in this python file
+# global variables available to all functions
 TRAINED_MODEL = 0
 MEDIAN_IMPUTER = 0
 OHCE = 0
@@ -65,7 +61,7 @@ def read_data(filename):
     df = pd.read_csv(os.path.join(application.config['UPLOAD_FOLDER'],filename))
     
     # See the data in the df
-    display(df.head())
+    print(df.head())
     
     # Full data set Shape
     print("Shape of Full set:")
@@ -94,7 +90,6 @@ def disp_df_info(df):
 
     # Plot Pie chart
     plt.pie(sizes, colors = colors, labels = labels, autopct='%1.1f%%', shadow=True, startangle=270,)
-
     plt.title('Percentage of Survival')
     plt.show()
     
@@ -105,11 +100,11 @@ def disp_df_info(df):
           
     # print first 10 data samples
     print("Top 10 rows:")
-    display(df.head(10))
+    print(df.head(10))
     
     #Describe the df to check if features need scaling
     print("Statistics:")
-    display(df.describe())
+    print(df.describe())
     
     # Identify the Categorical Vars and identify nulls
     print("Information:")
@@ -155,7 +150,7 @@ def data_cleaning(df_input):
     
     # Drop unwanted columns
     df.drop(['PassengerId','Name','Ticket','Cabin'], axis=1, inplace=True)
-    display(df.head(10))
+    print(df.head(10))
     
     # Cast Pclass to string for OHE
     df['Pclass'] = df['Pclass'].astype(str)
@@ -186,18 +181,19 @@ def data_split(df_input):
     # Create Y var
     y = df['Survived']
     print("Y/Target Var:")
-    display(y.head(10))
+    print(y.head(10))
+    
 
     # Create X var
     x = df.drop(['Survived'], axis=1)
     print("X/Feature Var:")
-    display(x.head(10))
+    print(x.head(10))
       
     # Train Test split
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.30, random_state = 0)
     print(x_train.shape)
-    print(y_train.shape)
     print(x_test.shape)
+    print(y_train.shape)
     print(y_test.shape)
     
     return(x_train, x_test, y_train, y_test)
@@ -240,10 +236,10 @@ def feature_engineering(x_train_input,x_test_input):
     x_test=OHCE.transform(x_test) 
     
     # Transformed x_train - dummy vars created
-    display(x_train.head())
+    print(x_train.head())
     
     # Transformed x_test - dummy vars created
-    display(x_test.head())
+    print(x_test.head())
     
     return(x_train,x_test)
 # end of feature_engineering function
@@ -559,7 +555,7 @@ def make_pred():
     # Call fx data_cleaning
     clean_x = data_cleaning(new_df) 
     print('New Cleaned Data:')
-    display(clean_x.head())
+    print(clean_x.head())
     
     # No need to split as you are ONLY getting X var from new data file
     
@@ -567,19 +563,19 @@ def make_pred():
     print(MEDIAN_IMPUTER.imputer_dict_)
     new_x = MEDIAN_IMPUTER.transform(clean_x)
     print('New FE Data:')
-    display(new_x.head())
+    print(new_x.head())
 
     # Feature Eng - Reuse the OHCE
     print(OHCE.encoder_dict_)
     new_x = OHCE.transform(new_x)
     print('New FE Data:')
-    display(new_x.head())
+    print(new_x.head())
 
     #Feature Selection - Reuse TO_DROP
     #Drop the redundant features
     new_x.drop(new_x[TO_DROP], axis=1, inplace=True)
     print('New Selected Data:')
-    display(new_x.head())
+    print(new_x.head())
 
     # Feature Scale - Reuse SCALER, TO_SCALE
     new_x = SCALER.transform(new_x)
@@ -612,7 +608,7 @@ def make_pred():
 
 # #### Main Program for Web App
 
-# In[ ]:
+# In[20]:
 
 
 # Main Program for Web app
@@ -624,7 +620,7 @@ if __name__ == "__main__":
        
     # Run the flask app in jupyter noetbook needs run_simple 
     # Run the flask app in python script needs app.run
-    # run_simple('localhost',8084, app, use_debugger=True)
+    #run_simple('localhost',8084, app, use_debugger=True)
     application.run('0.0.0.0',debug=True)
 
      
