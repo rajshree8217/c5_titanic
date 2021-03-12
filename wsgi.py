@@ -464,23 +464,24 @@ print('Flask object Instantiated')
 # In[15]:
 
 
+# Set the Upload_folder variable
 application.config['UPLOAD_FOLDER'] = upload_folder_path
 
 
 # In[16]:
 
 
-# home displays trainform.html
+# train displays trainform.html
 @application.route("/train", methods=['GET'])
 def train():
     return render_template('trainform.html')
-# end of home
+# end of train
 
 
 # In[17]:
 
 
-# submit on trainform.html
+# submit on trainform.html for program to build_mod
 @application.route("/build_mod", methods=['POST'])
 def build_mod():
     
@@ -511,29 +512,27 @@ def build_mod():
     TRAINED_MODEL,trnscore,tstscore = build_logreg_model(x_train,x_test,y_train,y_test)
 
     return render_template('trainresults.html',trnacc=trnscore, tstacc=tstscore)
-# end of home
+# end of build_mod
 
 
 # In[18]:
 
 
-# Use model on trainresults.html
-# OR Use model on predresults.html
+# Use model on trainresults.html for program to display predfrom
+# OR Use model on predresults.html for program to display predform
 @application.route("/use", methods=['POST','GET'])
 def use():
     return render_template('predform.html')
-# end of home
+# end of use
 
 
 # In[19]:
 
 
-# submit on predform.html
+# submit on predform.html for program to make predictions
 @application.route("/make_pred", methods=['POST'])
 def make_pred():
-    
-    
-    
+     
     file_obj = request.files.get('newdata')
     print("Type of the file is :", type(file_obj))
     name = file_obj.filename
